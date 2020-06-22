@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// "Physical" representation of the game's AI. Used to start the game and tick time for AI controllers.
+/// </summary>
 public class DirectorComponent : MonoBehaviour
 {
    public delegate void TickHandler();

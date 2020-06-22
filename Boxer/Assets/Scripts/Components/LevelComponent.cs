@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// A collection of all the things that exist within the game world.
+/// </summary>
 public class LevelComponent : MonoBehaviour
 {
     [Header("Boxes")]

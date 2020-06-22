@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// The monobehaviour representing the containers that boxes go into.
+/// </summary>
 [RequireComponent(typeof(ColorComponent))]
 public class ContainerComponent : MonoBehaviour
 {

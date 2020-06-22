@@ -1,66 +1,68 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Represents the robot in the game world.
+/// </summary>
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(PolygonCollider2D))]
+[RequireComponent(typeof(CollisionComponent))]
 public class RobotComponent : MonoBehaviour
 {
-    /* TODO:
-     * Robot components:
-     * - movement and actions
-     * - collisions and rendering
-     */
+    public enum HorizontalDirection
+    {
+        Stationary,
+        Left,
+        Right
+    }
 
-    private bool _moving = true;
-    private SpriteRenderer _renderer;
-    private PolygonCollider2D _collider;
+    public HorizontalDirection MovementDirection = HorizontalDirection.Stationary;
+    public float MovementForcePerSecond = 600;
+    public float JumpForce = 10;
+
     private Rigidbody2D _rigidbody;
-
-    private float _xMovementValue;
-    private float _lastTimeChangedDirection;
+    public CollisionComponent Collision => GetComponent<CollisionComponent>();
 
     private void Awake()
     {
-        _renderer = GetComponent<SpriteRenderer>();
-        _collider = GetComponent<PolygonCollider2D>();
         _rigidbody = GetComponent<Rigidbody2D>();
-        _xMovementValue = Random.value > 0.5f ? -1 : 1;
     }
     
-    private void Update() // TODO move to controller
+    private void Update()
     {
-        if (_moving)
-        {
-            _rigidbody.AddForce(600 * Time.deltaTime * new Vector2(_xMovementValue, 0));
-            if (Time.time - _lastTimeChangedDirection > 2.5f)
-            {
-                _xMovementValue = -_xMovementValue;
-                _lastTimeChangedDirection = Time.time;
-            }
-        }
+        ProcessMovement();
     }
 
-    private void OnCollisionEnter2D(Collision2D other)
+    private void ProcessMovement()
     {
-        BoxComponent boxComponent = other.gameObject.GetComponent<BoxComponent>();
-        if (boxComponent != null)
+        // get direction
+        int directionMultiplier = 0;
+        switch (MovementDirection)
         {
-            _moving = false;
-            Rigidbody2D otherRigidbody = other.gameObject.GetComponent<Rigidbody2D>();
-            if (otherRigidbody == null)
-            {
-                otherRigidbody = other.gameObject.AddComponent<Rigidbody2D>();
-            }
-
-            otherRigidbody.AddForce(10 * new Vector2(boxComponent.Color == ColorName.Blue ? 1 : -1, 1), ForceMode2D.Impulse);
+            case HorizontalDirection.Left:
+                directionMultiplier = -1;
+                break;
+            case HorizontalDirection.Right:
+                directionMultiplier = 1;
+                break;
+            case HorizontalDirection.Stationary:
+                directionMultiplier = 0;
+                break;
         }
+        
+        // apply force to move
+        _rigidbody.AddForce(directionMultiplier * Time.deltaTime * new Vector2(MovementForcePerSecond, 0));
     }
 
-    private void OnCollisionExit2D(Collision2D other)
+    public void Jump()
     {
-        if (other.gameObject.GetComponent<BoxComponent>() && !_moving)
-        {
-            _moving = true;
-        }
+        _rigidbody.AddForce(new Vector2(0, JumpForce), ForceMode2D.Impulse);
+    }
+
+    public bool IsStandingOnSolidGround()
+    {
+        List<RaycastHit2D> results = new List<RaycastHit2D>();
+        _rigidbody.Cast(Vector2.down, results, 0.05f);
+        return results.Count > 0; // TODO better filtering
     }
 }

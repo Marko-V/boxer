@@ -6,6 +6,9 @@ public enum ColorName
     Blue = 2
 }
 
+/// <summary>
+/// Used to mark colored objects.
+/// </summary>
 public class ColorComponent : MonoBehaviour
 {
     public ColorName Color;

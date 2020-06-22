@@ -5,6 +5,7 @@ using UnityEngine.Events;
 [Serializable] 
 public class CollisionEvent : UnityEvent<Collision2D> { }
 
+[RequireComponent(typeof(Collider2D))]
 public class CollisionComponent : MonoBehaviour
 {
     public CollisionEvent OnCollisionDetected;

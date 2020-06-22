@@ -1,7 +1,11 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// The monobehaviour representing a box.
+/// </summary>
+[RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(ColorComponent))]
-public class BoxComponent : MonoBehaviour
+public class BoxComponent : RegisteredBehavior
 {
     public ColorName Color
     {
@@ -10,6 +14,7 @@ public class BoxComponent : MonoBehaviour
     }
 
     private ColorComponent _colorComponent;
+
     protected ColorComponent ColorComponent
     {
         get
@@ -22,4 +27,35 @@ public class BoxComponent : MonoBehaviour
             return _colorComponent;
         }
     }
+
+    private Rigidbody2D _rigidbody;
+
+    public Rigidbody2D RigidBody
+    {
+        get
+        {
+            if (_rigidbody == null)
+            {
+                _rigidbody = GetComponent<Rigidbody2D>();
+            }
+
+            return _rigidbody;
+        }
+    }
+
+    private Transform _transform;
+
+    public Transform Transform
+    {
+        get
+        {
+            if (_transform == null)
+            {
+                _transform = transform;
+            }
+
+            return _transform;
+        }
+    }
+
 }
