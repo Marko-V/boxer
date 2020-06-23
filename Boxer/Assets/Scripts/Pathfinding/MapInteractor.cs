@@ -41,12 +41,13 @@ public class MapInteractor : MonoBehaviour
             Vector2 mouseClickWorldPosition = _camera.ScreenToWorldPoint(Input.mousePosition);
             _map.Painter.TurnImpassable(mouseClickWorldPosition);
         }
-
-        if (Input.GetKeyDown(KeyCode.Plus))
+        
+        // for some reason unity detects + as KeyCode.Equals on croatian keyboards
+        if (Input.GetKeyDown(KeyCode.Plus) || Input.GetKeyDown(KeyCode.Equals) || Input.GetKeyDown(KeyCode.KeypadPlus))
         {
             _map.Painter.BrushSize = Mathf.Min(10, _map.Painter.BrushSize + 1);
         } 
-        else if (Input.GetKeyDown(KeyCode.Minus))
+        else if (Input.GetKeyDown(KeyCode.Minus) || Input.GetKeyDown(KeyCode.KeypadMinus))
         {
             _map.Painter.BrushSize = Mathf.Max(1, _map.Painter.BrushSize - 1);
         }

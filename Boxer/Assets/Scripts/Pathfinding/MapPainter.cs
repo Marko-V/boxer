@@ -59,7 +59,11 @@ public class MapPainter : MonoBehaviour
         {
             for (int j = -BrushSize + 1; j < BrushSize; j++)
             {
-                tiles.Add(_grid.GetTile(gridPoint + new Vector2Int(i, j)));
+                MapTile tile = _grid.GetTile(gridPoint + new Vector2Int(i, j));
+                if (tile != null)
+                {
+                    tiles.Add(tile);
+                }
             }
         }
 
