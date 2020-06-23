@@ -50,7 +50,7 @@ public class LevelController
 
          if (foundBox == null)
          {
-            GetClosestBox(position, float.MaxValue);
+            return GetClosestBox(position, float.MaxValue);
          }
       }
 

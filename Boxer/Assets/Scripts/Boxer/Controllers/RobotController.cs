@@ -37,7 +37,7 @@ public class RobotController
 
     public void Jump()
     {
-        if (_state == State.Moving && _component.IsStandingOnSolidGround())
+        if ((_state == State.Idle ||_state == State.Moving) && _component.IsStandingOnSolidGround())
         {
             _component.Jump();
         }
@@ -58,6 +58,11 @@ public class RobotController
                 _component.MovementDirection = RobotComponent.HorizontalDirection.Left;
             }
         }
+        else
+        {
+            _state = State.Idle;
+            _component.MovementDirection = RobotComponent.HorizontalDirection.Stationary;
+        }
     }
 
     private void OnCollisionEnter(Collision2D other)
@@ -71,8 +76,9 @@ public class RobotController
             ContainerComponent container = _level.GetContainer(boxComponent.Color);
             float throwDistance = container.transform.position.x - _component.transform.position.x; // TODO make better estimate
             float throwDirection = Mathf.Sign(throwDistance);
-            float throwForce = Mathf.Abs(throwDistance);
-            boxComponent.RigidBody.AddForce(throwForce * new Vector2(throwDirection, 1), ForceMode2D.Impulse);
+            float throwForce = Mathf.Abs(throwDistance) + 3;
+            float throwY = throwDistance < 1 ? 2 : 1;
+            boxComponent.RigidBody.velocity = throwForce * new Vector2(throwDirection, throwY).normalized;
             _state = State.Idle;
         }
     }

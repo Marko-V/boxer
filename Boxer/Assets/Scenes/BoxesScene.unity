@@ -367,7 +367,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BoxSpawnArea: {fileID: 2091866930}
-  BoxesToSpawn: 8
+  BoxesToSpawn: 12
   Box: {fileID: 466315546}
   InstantiatedBoxes: []
   Container: {fileID: 802798683}

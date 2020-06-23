@@ -34,12 +34,13 @@ public class ContainerComponent : MonoBehaviour
             if (box.Color == Color)
             {
                 Destroy(box.gameObject);
+                return;
             }
-            else
-            {
-                Rigidbody2D boxRigidbody = box.GetComponent<Rigidbody2D>();
-                boxRigidbody.AddForce(Vector2.up * 10);
-            }
+        }
+        Rigidbody2D otherRigidbody = other.gameObject.GetComponent<Rigidbody2D>();
+        if (otherRigidbody != null)
+        {
+            otherRigidbody.AddForce(Vector2.up * 6);
         }
     }
 }

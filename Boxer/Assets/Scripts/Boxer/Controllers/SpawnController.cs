@@ -8,6 +8,8 @@ public class SpawnController
 {
     private LevelController _level;
     private LevelComponent _component;
+
+    private bool _shouldSpawn = false;
     public SpawnController(LevelController levelController, LevelComponent component)
     {
         _level = levelController;
@@ -21,6 +23,14 @@ public class SpawnController
         SpawnRobot();
     }
 
+    public void SpawnMoreBoxesIfNecessary()
+    {
+        if (_shouldSpawn)
+        {
+            SpawnBoxes();
+        }
+    }
+
     private void SpawnBoxes()
     {
         for (int i = 0; i < _component.BoxesToSpawn; i++)
@@ -29,6 +39,8 @@ public class SpawnController
             BoxComponent box = _component.CreateBox(point);
             box.OnDestroyed += BoxDestroyed;
         }
+
+        _shouldSpawn = false;
     }
 
     private void BoxDestroyed(RegisteredBehavior boxComponent)
@@ -36,6 +48,12 @@ public class SpawnController
         if (boxComponent is BoxComponent box)
         {
             _component.InstantiatedBoxes.Remove(box);
+            if (_component.InstantiatedBoxes.Count == 0)
+            {
+                // instantiation should not be done through OnDestroy, so we're delaying it
+                // unfortunately this means we use polling (update), rather than events
+                _shouldSpawn = true;
+            }
         }
     }
 

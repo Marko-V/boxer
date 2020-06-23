@@ -51,5 +51,6 @@ public class DirectorController
     private void TickControls()
     {
         _level.Robot.Tick();
+        _spawn.SpawnMoreBoxesIfNecessary();
     }
 }
